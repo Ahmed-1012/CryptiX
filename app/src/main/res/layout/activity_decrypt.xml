@@ -42,21 +42,269 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Enter decryption key:"
+            android:text="Select matrix size:"
             android:textColor="@color/white"
             android:textSize="16sp"
             android:layout_marginBottom="8dp" />
 
-        <EditText
-            android:id="@+id/etDecryptKey"
+        <Spinner
+            android:id="@+id/spinnerMatrixSize"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:hint="Enter your key..."
-            android:textColorHint="@color/gray"
-            android:textColor="@color/white"
             android:background="@drawable/edittext_border"
-            android:padding="12dp"
-            android:layout_marginBottom="30dp" />
+            android:popupBackground="@color/white"
+            android:layout_marginBottom="20dp" />
+
+        <!-- 2x2 Matrix Input -->
+        <LinearLayout
+            android:id="@+id/grid2x2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Enter 2x2 Key Matrix:"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:layout_marginBottom="10dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center">
+
+                <EditText
+                    android:id="@+id/et2x2_11"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:hint="0"
+                    android:text="3"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/gray"
+                    android:background="@drawable/edittext_border"
+                    android:inputType="number"
+                    android:textSize="16sp"
+                    android:gravity="center"
+                    android:layout_margin="5dp" />
+
+                <EditText
+                    android:id="@+id/et2x2_12"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:hint="0"
+                    android:text="3"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/gray"
+                    android:background="@drawable/edittext_border"
+                    android:inputType="number"
+                    android:textSize="16sp"
+                    android:gravity="center"
+                    android:layout_margin="5dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center">
+
+                <EditText
+                    android:id="@+id/et2x2_21"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:hint="0"
+                    android:text="2"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/gray"
+                    android:background="@drawable/edittext_border"
+                    android:inputType="number"
+                    android:textSize="16sp"
+                    android:gravity="center"
+                    android:layout_margin="5dp" />
+
+                <EditText
+                    android:id="@+id/et2x2_22"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:hint="0"
+                    android:text="5"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/gray"
+                    android:background="@drawable/edittext_border"
+                    android:inputType="number"
+                    android:textSize="16sp"
+                    android:gravity="center"
+                    android:layout_margin="5dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- 3x3 Matrix Input -->
+        <LinearLayout
+            android:id="@+id/grid3x3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Enter 3x3 Key Matrix:"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:layout_marginBottom="10dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center">
+
+                <EditText
+                    android:id="@+id/et3x3_11"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:hint="0"
+                    android:text="17"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/gray"
+                    android:background="@drawable/edittext_border"
+                    android:inputType="number"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:layout_margin="2dp" />
+
+                <EditText
+                    android:id="@+id/et3x3_12"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:hint="0"
+                    android:text="17"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/gray"
+                    android:background="@drawable/edittext_border"
+                    android:inputType="number"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:layout_margin="2dp" />
+
+                <EditText
+                    android:id="@+id/et3x3_13"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:hint="0"
+                    android:text="5"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/gray"
+                    android:background="@drawable/edittext_border"
+                    android:inputType="number"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:layout_margin="2dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center">
+
+                <EditText
+                    android:id="@+id/et3x3_21"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:hint="0"
+                    android:text="21"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/gray"
+                    android:background="@drawable/edittext_border"
+                    android:inputType="number"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:layout_margin="2dp" />
+
+                <EditText
+                    android:id="@+id/et3x3_22"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:hint="0"
+                    android:text="18"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/gray"
+                    android:background="@drawable/edittext_border"
+                    android:inputType="number"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:layout_margin="2dp" />
+
+                <EditText
+                    android:id="@+id/et3x3_23"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:hint="0"
+                    android:text="21"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/gray"
+                    android:background="@drawable/edittext_border"
+                    android:inputType="number"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:layout_margin="2dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center">
+
+                <EditText
+                    android:id="@+id/et3x3_31"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:hint="0"
+                    android:text="2"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/gray"
+                    android:background="@drawable/edittext_border"
+                    android:inputType="number"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:layout_margin="2dp" />
+
+                <EditText
+                    android:id="@+id/et3x3_32"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:hint="0"
+                    android:text="2"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/gray"
+                    android:background="@drawable/edittext_border"
+                    android:inputType="number"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:layout_margin="2dp" />
+
+                <EditText
+                    android:id="@+id/et3x3_33"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:hint="0"
+                    android:text="19"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/gray"
+                    android:background="@drawable/edittext_border"
+                    android:inputType="number"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:layout_margin="2dp" />
+            </LinearLayout>
+        </LinearLayout>
 
         <Button
             android:id="@+id/btnDecryptNow"
@@ -65,6 +313,7 @@
             android:text="Decrypt"
             android:textSize="18sp"
             android:backgroundTint="@color/teal_700"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp" />
 
         <TextView
@@ -76,6 +325,15 @@
             android:textSize="14sp"
             android:padding="12dp"
             android:background="@drawable/result_border"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/btnCopyDecrypted"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Copy Decrypted Text"
+            android:backgroundTint="@color/teal_200"
+            android:layout_marginTop="10dp"
             android:visibility="gone" />
 
     </LinearLayout>
