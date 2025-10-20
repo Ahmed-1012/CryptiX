@@ -11,12 +11,12 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:fontFamily="@font/grima"
         android:text="CryptiX"
         android:textColor="@color/white"
         android:textSize="50sp"
-        android:textStyle="bold"
-        android:fontFamily="@font/grima"
-        android:layout_marginBottom="50dp" />
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/btnEncrypt"
@@ -32,6 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:text="Decrypt"
+        android:layout_marginBottom="30dp"
         android:textSize="18sp"
         android:backgroundTint="@color/teal_700" />
 

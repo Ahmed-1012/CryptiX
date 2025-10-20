@@ -6,7 +6,6 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.*
-import kotlin.math.roundToInt
 
 class EncryptActivity : AppCompatActivity() {
 
@@ -40,12 +39,18 @@ class EncryptActivity : AppCompatActivity() {
 
     private fun setupMatrixSizeSpinner() {
         val matrixSizes = arrayOf("2x2 Matrix", "3x3 Matrix")
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, matrixSizes)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        // Use custom adapter with white text
+        val adapter = ArrayAdapter(this, R.layout.custom_spinner_item, matrixSizes)
+        adapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item)
+
         spinnerMatrixSize.adapter = adapter
 
         spinnerMatrixSize.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: android.view.View?, position: Int, id: Long) {
+                // Set text color for selected item
+                (view as? TextView)?.setTextColor(resources.getColor(android.R.color.white, null))
+
                 when (position) {
                     0 -> {
                         grid2x2.visibility = LinearLayout.VISIBLE
@@ -148,14 +153,16 @@ class EncryptActivity : AppCompatActivity() {
             val vector = IntArray(n) { j -> block[j] - 'A' }
             val encryptedVector = IntArray(n)
 
-            // Matrix multiplication: C = (P * K) mod 26
-            for (row in 0 until n) {
+            // CORRECTED: Row vector × Key matrix multiplication
+            // For each column in the key matrix
+            for (col in 0 until n) {
                 var sum = 0
-                for (col in 0 until n) {
-                    sum += vector[col] * keyMatrix[row][col]
+                // Multiply row vector elements with key matrix column elements
+                for (row in 0 until n) {
+                    sum += vector[row] * keyMatrix[row][col]
                 }
-                encryptedVector[row] = sum % 26
-                if (encryptedVector[row] < 0) encryptedVector[row] += 26
+                encryptedVector[col] = sum % 26
+                if (encryptedVector[col] < 0) encryptedVector[col] += 26
             }
 
             // Convert back to letters

@@ -40,12 +40,18 @@ class DecryptActivity : AppCompatActivity() {
 
     private fun setupMatrixSizeSpinner() {
         val matrixSizes = arrayOf("2x2 Matrix", "3x3 Matrix")
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, matrixSizes)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        // Use custom adapter with white text
+        val adapter = ArrayAdapter(this, R.layout.custom_spinner_item, matrixSizes)
+        adapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item)
+
         spinnerMatrixSize.adapter = adapter
 
         spinnerMatrixSize.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: android.view.View?, position: Int, id: Long) {
+                // Set text color for selected item
+                (view as? TextView)?.setTextColor(resources.getColor(android.R.color.white, null))
+
                 when (position) {
                     0 -> {
                         grid2x2.visibility = LinearLayout.VISIBLE
@@ -150,14 +156,14 @@ class DecryptActivity : AppCompatActivity() {
             val vector = IntArray(n) { j -> block[j] - 'A' }
             val decryptedVector = IntArray(n)
 
-            // Matrix multiplication: P = (C * K⁻¹) mod 26
-            for (row in 0 until n) {
+            // CORRECTED: Row vector × Inverse matrix multiplication
+            for (col in 0 until n) {
                 var sum = 0
-                for (col in 0 until n) {
-                    sum += vector[col] * inverseMatrix[row][col]
+                for (row in 0 until n) {
+                    sum += vector[row] * inverseMatrix[row][col]
                 }
-                decryptedVector[row] = sum % 26
-                if (decryptedVector[row] < 0) decryptedVector[row] += 26
+                decryptedVector[col] = sum % 26
+                if (decryptedVector[col] < 0) decryptedVector[col] += 26
             }
 
             // Convert back to letters
@@ -176,7 +182,6 @@ class DecryptActivity : AppCompatActivity() {
         val d = matrix[1][1]
 
         // Calculate determinant
-        // 36  - 35
         val det = (a * d - b * c) % 26
         if (det == 0) throw IllegalArgumentException("Matrix is not invertible")
 
