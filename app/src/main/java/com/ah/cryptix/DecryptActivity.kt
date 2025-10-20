@@ -134,7 +134,7 @@ class DecryptActivity : AppCompatActivity() {
 
     private fun hillCipherDecrypt(cipherText: String, keyMatrix: Array<IntArray>): String {
         val n = keyMatrix.size
-        var text = cipherText.uppercase().replace("[^A-Z]".toRegex(), "")
+        val text = cipherText.uppercase().replace("[^A-Z]".toRegex(), "")
 
         // Calculate inverse matrix
         val inverseMatrix = when (n) {
@@ -176,6 +176,7 @@ class DecryptActivity : AppCompatActivity() {
         val d = matrix[1][1]
 
         // Calculate determinant
+        // 36  - 35
         val det = (a * d - b * c) % 26
         if (det == 0) throw IllegalArgumentException("Matrix is not invertible")
 
@@ -227,6 +228,10 @@ class DecryptActivity : AppCompatActivity() {
 
     private fun modInverse(a: Int, m: Int): Int {
         var a = a % m
+        // Ensure a is positive
+        if (a < 0) {
+            a += m
+        }
         for (x in 1 until m) {
             if ((a * x) % m == 1) {
                 return x
