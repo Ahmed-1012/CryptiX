@@ -291,7 +291,18 @@
                     android:layout_margin="2dp" />
             </LinearLayout>
         </LinearLayout>
-
+        <!-- Add this after the matrix inputs and before the encrypt button -->
+        <TextView
+            android:id="@+id/tvMatrixWarning"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="⚠️ Warning: This matrix is not invertible! Decryption will not be possible."
+            android:textColor="#FFFF4444"
+            android:textSize="14sp"
+            android:padding="12dp"
+            android:background="#22FF4444"
+            android:visibility="gone"
+            android:layout_marginBottom="10dp" />
         <Button
             android:id="@+id/btnEncryptNow"
             android:layout_width="match_parent"

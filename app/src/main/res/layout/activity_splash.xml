@@ -14,10 +14,16 @@
         android:textSize="24sp"
         android:textStyle="bold" />
 
-    <ProgressBar
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:indeterminateTint="@color/white" />
+        android:textColor="@color/white"
+        android:textSize="24sp"
+         />
+
+
+
 
 </LinearLayout>
