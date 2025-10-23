@@ -1,56 +1,54 @@
 package com.ah.cryptix
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.view.ViewGroup
 import android.widget.*
-import kotlin.math.roundToInt
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 
-class DecryptActivity : AppCompatActivity() {
+class MatrixInverseActivity : AppCompatActivity() {
 
-    private lateinit var etEncryptedText: EditText
     private lateinit var spinnerMatrixSize: Spinner
     private lateinit var grid2x2: LinearLayout
     private lateinit var grid3x3: LinearLayout
-    private lateinit var btnDecryptNow: Button
-    private lateinit var tvDecryptedResult: TextView
-    private lateinit var btnCopyDecrypted: Button
+    private lateinit var btnCalculateInverse: Button
+    private lateinit var tvMatrixWarning: TextView
+    private lateinit var tvResultTitle: TextView
+    private lateinit var result2x2: LinearLayout
+    private lateinit var result3x3: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_decrypt)
+        setContentView(R.layout.activity_matrix_inverse)
 
         initializeViews()
         setupMatrixSizeSpinner()
-        setupDecryptButton()
-        setupCopyButton()
+        setupCalculateButton()
     }
 
     private fun initializeViews() {
-        etEncryptedText = findViewById(R.id.etEncryptedText)
         spinnerMatrixSize = findViewById(R.id.spinnerMatrixSize)
         grid2x2 = findViewById(R.id.grid2x2)
         grid3x3 = findViewById(R.id.grid3x3)
-        btnDecryptNow = findViewById(R.id.btnDecryptNow)
-        tvDecryptedResult = findViewById(R.id.tvDecryptedResult)
-        btnCopyDecrypted = findViewById(R.id.btnCopyDecrypted)
+        btnCalculateInverse = findViewById(R.id.btnCalculateInverse)
+        tvMatrixWarning = findViewById(R.id.tvMatrixWarning)
+        tvResultTitle = findViewById(R.id.tvResultTitle)
+        result2x2 = findViewById(R.id.result2x2)
+        result3x3 = findViewById(R.id.result3x3)
     }
 
     private fun setupMatrixSizeSpinner() {
         val matrixSizes = arrayOf("2x2 Matrix", "3x3 Matrix")
 
-        // Use custom adapter with white text
         val adapter = ArrayAdapter(this, R.layout.custom_spinner_item, matrixSizes)
         adapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item)
-
         spinnerMatrixSize.adapter = adapter
 
         spinnerMatrixSize.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: android.view.View?, position: Int, id: Long) {
-                // Set text color for selected item
-                (view as? TextView)?.setTextColor(resources.getColor(android.R.color.white, null))
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                // Hide all results and warnings when switching
+                resetResults()
 
                 when (position) {
                     0 -> {
@@ -68,42 +66,23 @@ class DecryptActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupDecryptButton() {
-        btnDecryptNow.setOnClickListener {
-            val encryptedText = etEncryptedText.text.toString().trim()
-
-            if (encryptedText.isEmpty()) {
-                Toast.makeText(this, "Please enter text to decrypt", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
+    private fun setupCalculateButton() {
+        btnCalculateInverse.setOnClickListener {
+            resetResults()
 
             try {
-                val decryptedText = when (spinnerMatrixSize.selectedItemPosition) {
-                    0 -> decryptWith2x2Matrix(encryptedText)
-                    1 -> decryptWith3x3Matrix(encryptedText)
+                when (spinnerMatrixSize.selectedItemPosition) {
+                    0 -> calculate2x2Inverse()
+                    1 -> calculate3x3Inverse()
                     else -> throw IllegalArgumentException("Invalid matrix size")
                 }
-
-                tvDecryptedResult.text = "Decrypted: $decryptedText"
-                tvDecryptedResult.visibility = TextView.VISIBLE
-                btnCopyDecrypted.visibility = Button.VISIBLE
-
             } catch (e: Exception) {
-                Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+                showError("Error: ${e.message}")
             }
         }
     }
 
-    private fun setupCopyButton() {
-        btnCopyDecrypted.setOnClickListener {
-            val decryptedText = tvDecryptedResult.text.toString().replace("Decrypted: ", "")
-            copyToClipboard(decryptedText)
-            Toast.makeText(this, "Decrypted text copied to clipboard", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun decryptWith2x2Matrix(text: String): String {
-        // Get matrix values from input fields
+    private fun calculate2x2Inverse() {
         val k11 = findViewById<EditText>(R.id.et2x2_11).text.toString().toInt()
         val k12 = findViewById<EditText>(R.id.et2x2_12).text.toString().toInt()
         val k21 = findViewById<EditText>(R.id.et2x2_21).text.toString().toInt()
@@ -114,11 +93,15 @@ class DecryptActivity : AppCompatActivity() {
             intArrayOf(k21, k22)
         )
 
-        return hillCipherDecrypt(text, keyMatrix)
+        try {
+            val inverseMatrix = calculate2x2InverseMatrix(keyMatrix)
+            display2x2Result(inverseMatrix)
+        } catch (e: Exception) {
+            showError("Matrix is not invertible! Determinant is zero.")
+        }
     }
 
-    private fun decryptWith3x3Matrix(text: String): String {
-        // Get matrix values from input fields
+    private fun calculate3x3Inverse() {
         val k11 = findViewById<EditText>(R.id.et3x3_11).text.toString().toInt()
         val k12 = findViewById<EditText>(R.id.et3x3_12).text.toString().toInt()
         val k13 = findViewById<EditText>(R.id.et3x3_13).text.toString().toInt()
@@ -135,47 +118,15 @@ class DecryptActivity : AppCompatActivity() {
             intArrayOf(k31, k32, k33)
         )
 
-        return hillCipherDecrypt(text, keyMatrix)
+        try {
+            val inverseMatrix = calculate3x3InverseMatrix(keyMatrix)
+            display3x3Result(inverseMatrix)
+        } catch (e: Exception) {
+            showError("Matrix is not invertible! Determinant is zero.")
+        }
     }
 
-    private fun hillCipherDecrypt(cipherText: String, keyMatrix: Array<IntArray>): String {
-        val n = keyMatrix.size
-        val text = cipherText.uppercase().replace("[^A-Z]".toRegex(), "")
-
-        // Calculate inverse matrix
-        val inverseMatrix = when (n) {
-            2 -> calculate2x2Inverse(keyMatrix)
-            3 -> calculate3x3Inverse(keyMatrix)
-            else -> throw IllegalArgumentException("Unsupported matrix size")
-        }
-
-        val result = StringBuilder()
-
-        for (i in text.indices step n) {
-            val block = text.substring(i, i + n)
-            val vector = IntArray(n) { j -> block[j] - 'A' }
-            val decryptedVector = IntArray(n)
-
-            // CORRECTED: Row vector × Inverse matrix multiplication
-            for (col in 0 until n) {
-                var sum = 0
-                for (row in 0 until n) {
-                    sum += vector[row] * inverseMatrix[row][col]
-                }
-                decryptedVector[col] = sum % 26
-                if (decryptedVector[col] < 0) decryptedVector[col] += 26
-            }
-
-            // Convert back to letters
-            for (value in decryptedVector) {
-                result.append((value + 'A'.code).toChar())
-            }
-        }
-
-        return result.toString()
-    }
-
-    private fun calculate2x2Inverse(matrix: Array<IntArray>): Array<IntArray> {
+    private fun calculate2x2InverseMatrix(matrix: Array<IntArray>): Array<IntArray> {
         val a = matrix[0][0]
         val b = matrix[0][1]
         val c = matrix[1][0]
@@ -195,7 +146,7 @@ class DecryptActivity : AppCompatActivity() {
         ).map { row -> row.map { (it + 26) % 26 }.toIntArray() }.toTypedArray()
     }
 
-    private fun calculate3x3Inverse(matrix: Array<IntArray>): Array<IntArray> {
+    private fun calculate3x3InverseMatrix(matrix: Array<IntArray>): Array<IntArray> {
         val a = matrix[0][0]
         val b = matrix[0][1]
         val c = matrix[0][2]
@@ -245,9 +196,40 @@ class DecryptActivity : AppCompatActivity() {
         throw IllegalArgumentException("Modular inverse doesn't exist")
     }
 
-    private fun copyToClipboard(text: String) {
-        val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val clip = ClipData.newPlainText("Decrypted Text", text)
-        clipboard.setPrimaryClip(clip)
+    private fun display2x2Result(matrix: Array<IntArray>) {
+        tvResultTitle.visibility = TextView.VISIBLE
+        result2x2.visibility = LinearLayout.VISIBLE
+
+        findViewById<TextView>(R.id.tv2x2_11).text = matrix[0][0].toString()
+        findViewById<TextView>(R.id.tv2x2_12).text = matrix[0][1].toString()
+        findViewById<TextView>(R.id.tv2x2_21).text = matrix[1][0].toString()
+        findViewById<TextView>(R.id.tv2x2_22).text = matrix[1][1].toString()
+    }
+
+    private fun display3x3Result(matrix: Array<IntArray>) {
+        tvResultTitle.visibility = TextView.VISIBLE
+        result3x3.visibility = LinearLayout.VISIBLE
+
+        findViewById<TextView>(R.id.tv3x3_11).text = matrix[0][0].toString()
+        findViewById<TextView>(R.id.tv3x3_12).text = matrix[0][1].toString()
+        findViewById<TextView>(R.id.tv3x3_13).text = matrix[0][2].toString()
+        findViewById<TextView>(R.id.tv3x3_21).text = matrix[1][0].toString()
+        findViewById<TextView>(R.id.tv3x3_22).text = matrix[1][1].toString()
+        findViewById<TextView>(R.id.tv3x3_23).text = matrix[1][2].toString()
+        findViewById<TextView>(R.id.tv3x3_31).text = matrix[2][0].toString()
+        findViewById<TextView>(R.id.tv3x3_32).text = matrix[2][1].toString()
+        findViewById<TextView>(R.id.tv3x3_33).text = matrix[2][2].toString()
+    }
+
+    private fun showError(message: String) {
+        tvMatrixWarning.text = "⚠️ $message"
+        tvMatrixWarning.visibility = TextView.VISIBLE
+    }
+
+    private fun resetResults() {
+        tvMatrixWarning.visibility = TextView.GONE
+        tvResultTitle.visibility = TextView.GONE
+        result2x2.visibility = LinearLayout.GONE
+        result3x3.visibility = LinearLayout.GONE
     }
 }

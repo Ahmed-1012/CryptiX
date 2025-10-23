@@ -12,6 +12,9 @@
         android:supportsRtl="false"
         android:theme="@style/Theme.CryptiX">
         <activity
+            android:name=".MatrixInverseActivity"
+            android:exported="false" />
+        <activity
             android:name=".InfoActivity"
             android:exported="false" />
         <activity

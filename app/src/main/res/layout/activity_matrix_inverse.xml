@@ -13,31 +13,12 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Decrypt Text"
+            android:text="Matrix Inverse Calculator"
             android:textColor="@color/white"
             android:textSize="24sp"
             android:textStyle="bold"
+            android:layout_gravity="center_horizontal"
             android:layout_marginBottom="30dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Enter text to decrypt:"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:layout_marginBottom="8dp" />
-
-        <EditText
-            android:id="@+id/etEncryptedText"
-            android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:hint="Type encrypted text here..."
-            android:textColorHint="@color/gray"
-            android:textColor="@color/white"
-            android:background="@drawable/edittext_border"
-            android:padding="12dp"
-            android:gravity="top"
-            android:layout_marginBottom="20dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -52,7 +33,6 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@drawable/edittext_border"
-            android:popupBackground="@color/white"
             android:layout_marginBottom="20dp" />
 
         <!-- 2x2 Matrix Input -->
@@ -66,7 +46,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Enter 2x2 Key Matrix:"
+                android:text="Enter 2x2 Matrix:"
                 android:textColor="@color/white"
                 android:textSize="14sp"
                 android:layout_marginBottom="10dp" />
@@ -149,7 +129,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Enter 3x3 Key Matrix:"
+                android:text="Enter 3x3 Matrix:"
                 android:textColor="@color/white"
                 android:textSize="14sp"
                 android:layout_marginBottom="10dp" />
@@ -294,35 +274,235 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/btnDecryptNow"
+            android:id="@+id/btnCalculateInverse"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:text="Decrypt"
+            android:text="Calculate Inverse"
             android:textSize="18sp"
             android:backgroundTint="@color/teal_700"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp" />
 
+        <!-- Warning Message -->
         <TextView
-            android:id="@+id/tvDecryptedResult"
+            android:id="@+id/tvMatrixWarning"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Decrypted text will appear here..."
-            android:textColor="@color/white"
+            android:text="⚠️ Warning: This matrix is not invertible!"
+            android:textColor="#FFFF4444"
             android:textSize="14sp"
             android:padding="12dp"
-            android:background="@drawable/result_border"
-            android:visibility="gone" />
+            android:background="#22FF4444"
+            android:visibility="gone"
+            android:layout_marginBottom="10dp" />
 
-        <Button
-            android:id="@+id/btnCopyDecrypted"
+        <!-- Result Display -->
+        <TextView
+            android:id="@+id/tvResultTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Copy Decrypted Text"
-            android:backgroundTint="@color/teal_200"
-            android:layout_marginTop="10dp"
-            android:visibility="gone" />
+            android:text="Inverse Matrix:"
+            android:textColor="@color/purple_200"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            android:layout_marginBottom="10dp" />
+
+        <!-- 2x2 Result Display -->
+        <LinearLayout
+            android:id="@+id/result2x2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center">
+
+                <TextView
+                    android:id="@+id/tv2x2_11"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:text="0"
+                    android:textColor="@color/white"
+                    android:background="@drawable/result_border"
+                    android:textSize="16sp"
+                    android:gravity="center"
+                    android:layout_margin="5dp" />
+
+                <TextView
+                    android:id="@+id/tv2x2_12"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:text="0"
+                    android:textColor="@color/white"
+                    android:background="@drawable/result_border"
+                    android:textSize="16sp"
+                    android:gravity="center"
+                    android:layout_margin="5dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center">
+
+                <TextView
+                    android:id="@+id/tv2x2_21"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:text="0"
+                    android:textColor="@color/white"
+                    android:background="@drawable/result_border"
+                    android:textSize="16sp"
+                    android:gravity="center"
+                    android:layout_margin="5dp" />
+
+                <TextView
+                    android:id="@+id/tv2x2_22"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:text="0"
+                    android:textColor="@color/white"
+                    android:background="@drawable/result_border"
+                    android:textSize="16sp"
+                    android:gravity="center"
+                    android:layout_margin="5dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- 3x3 Result Display -->
+        <LinearLayout
+            android:id="@+id/result3x3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center">
+
+                <TextView
+                    android:id="@+id/tv3x3_11"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:text="0"
+                    android:textColor="@color/white"
+                    android:background="@drawable/result_border"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:layout_margin="2dp" />
+
+                <TextView
+                    android:id="@+id/tv3x3_12"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:text="0"
+                    android:textColor="@color/white"
+                    android:background="@drawable/result_border"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:layout_margin="2dp" />
+
+                <TextView
+                    android:id="@+id/tv3x3_13"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:text="0"
+                    android:textColor="@color/white"
+                    android:background="@drawable/result_border"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:layout_margin="2dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center">
+
+                <TextView
+                    android:id="@+id/tv3x3_21"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:text="0"
+                    android:textColor="@color/white"
+                    android:background="@drawable/result_border"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:layout_margin="2dp" />
+
+                <TextView
+                    android:id="@+id/tv3x3_22"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:text="0"
+                    android:textColor="@color/white"
+                    android:background="@drawable/result_border"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:layout_margin="2dp" />
+
+                <TextView
+                    android:id="@+id/tv3x3_23"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:text="0"
+                    android:textColor="@color/white"
+                    android:background="@drawable/result_border"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:layout_margin="2dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center">
+
+                <TextView
+                    android:id="@+id/tv3x3_31"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:text="0"
+                    android:textColor="@color/white"
+                    android:background="@drawable/result_border"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:layout_margin="2dp" />
+
+                <TextView
+                    android:id="@+id/tv3x3_32"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:text="0"
+                    android:textColor="@color/white"
+                    android:background="@drawable/result_border"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:layout_margin="2dp" />
+
+                <TextView
+                    android:id="@+id/tv3x3_33"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:text="0"
+                    android:textColor="@color/white"
+                    android:background="@drawable/result_border"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:layout_margin="2dp" />
+            </LinearLayout>
+        </LinearLayout>
 
     </LinearLayout>
-
 </ScrollView>

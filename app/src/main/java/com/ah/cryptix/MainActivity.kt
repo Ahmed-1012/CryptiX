@@ -12,7 +12,9 @@ class MainActivity : AppCompatActivity() {
 
         val btnEncrypt = findViewById<Button>(R.id.btnEncrypt)
         val btnDecrypt = findViewById<Button>(R.id.btnDecrypt)
+        val btnMatrixInverse = findViewById<Button>(R.id.btnMatrixInverse)
         val btnInfo = findViewById<Button>(R.id.btnInfo)
+
 
         btnEncrypt.setOnClickListener {
             val intent = Intent(this, EncryptActivity::class.java)
@@ -22,6 +24,10 @@ class MainActivity : AppCompatActivity() {
         btnDecrypt.setOnClickListener {
             val intent = Intent(this, DecryptActivity::class.java)
             startActivity(intent)
+        }
+        btnMatrixInverse.setOnClickListener {
+                val intent= Intent(this, MatrixInverseActivity::class.java)
+                startActivity(intent)
         }
         btnInfo.setOnClickListener {
             val intent = Intent(this, InfoActivity::class.java)

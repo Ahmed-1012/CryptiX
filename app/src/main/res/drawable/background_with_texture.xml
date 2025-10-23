@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Gradient layer (bottom) -->
+    <item>
+        <shape>
+            <gradient
+                android:startColor="#000000"
+                android:endColor="#240013"
+                android:angle="270" />
+        </shape>
+    </item>
+
+    <!-- Texture layer (top, semi-transparent) -->
+    <item>
+        <bitmap
+            android:src="@drawable/texture_image"
+            android:tileMode="repeat"
+            android:gravity="fill"
+            android:alpha="0.2" />
+    </item>
+
+</layer-list>
