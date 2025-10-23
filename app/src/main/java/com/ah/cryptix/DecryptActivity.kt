@@ -179,7 +179,7 @@ class DecryptActivity : AppCompatActivity() {
         val a = matrix[0][0]
         val b = matrix[0][1]
         val c = matrix[1][0]
-        val d = matrix[1][1]
+        val d = matrix[1][1] 
 
         // Calculate determinant
         val det = (a * d - b * c) % 26
